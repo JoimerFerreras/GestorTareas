@@ -1,6 +1,7 @@
 ﻿using GestorTareas.Clases;
 using System.IO;
 using System.Text.Json;
+using System.Linq;
 
 string rutaArchivo = "tareas.json";
 
@@ -15,7 +16,8 @@ while (!salir)
     Console.WriteLine("===== GESTOR DE TAREAS =====");
     Console.WriteLine("1. Crear nueva tarea");
     Console.WriteLine("2. Listar tareas");
-    Console.WriteLine("3. Salir");
+    Console.WriteLine("3. Marcar como completada");
+    Console.WriteLine("4. Salir");
     Console.Write("Elige una opción: ");
 
     string opcion = Console.ReadLine();
@@ -38,6 +40,13 @@ while (!salir)
             break;
 
         case "3":
+            // MARCAR COMO COMPLETADA
+            MarcarComoCompletada(tareas);
+            GuardarTareasEnJson(tareas);
+            Pausar();
+            break;
+            
+        case "4":
             salir = true;
             break;
 
@@ -134,6 +143,39 @@ List<Tarea> CargarTareasDesdeJson()
     var lista = JsonSerializer.Deserialize<List<Tarea>>(json);
 
     return lista ?? new List<Tarea>();
+}
+
+void MarcarComoCompletada(List<Tarea> lista)
+{
+    Console.Clear();
+    Console.WriteLine("=== Marcar tarea como completada ===");
+
+    if (lista.Count == 0)
+    {
+        Console.WriteLine("No hay tareas registradas.");
+        return;
+    }
+
+    Console.Write("Ingresa el ID de la tarea a marcar como completada: ");
+
+    if (int.TryParse(Console.ReadLine(), out int id))
+    {
+        var tarea = lista.FirstOrDefault(t => t.Id == id);
+
+        if (tarea != null)
+        {
+            tarea.Completada = true;
+            Console.WriteLine($"La tarea '{tarea.Titulo}' fue marcada como completada ✅");
+        }
+        else
+        {
+            Console.WriteLine("No se encontró ninguna tarea con ese ID.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("ID inválido.");
+    }
 }
 
 void Pausar()
