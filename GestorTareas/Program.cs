@@ -18,7 +18,8 @@ while (!salir)
     Console.WriteLine("1. Crear nueva tarea");
     Console.WriteLine("2. Listar tareas");
     Console.WriteLine("3. Eliminar tarea");
-    Console.WriteLine("4. Salir");
+    Console.WriteLine("4. Marcar como completada");
+    Console.WriteLine("5. Salir");
     Console.Write("Elige una opción: ");
 
     string opcion = Console.ReadLine();
@@ -39,7 +40,7 @@ while (!salir)
             ListarTareas(tareas);
             Pausar();
             break;
-
+        
         case "3":
             // ELIMINAR
             EliminarTarea(tareas);
@@ -48,6 +49,13 @@ while (!salir)
             break;
 
         case "4":
+            // MARCAR COMO COMPLETADA
+            MarcarComoCompletada(tareas);
+            GuardarTareasEnJson(tareas);
+            Pausar();
+            break;
+            
+        case "5":
             salir = true;
             break;
 
@@ -176,6 +184,40 @@ void EliminarTarea(List<Tarea> lista)
         Console.WriteLine("ID inválido.");
     }
 }
+
+void MarcarComoCompletada(List<Tarea> lista)
+{
+    Console.Clear();
+    Console.WriteLine("=== Marcar tarea como completada ===");
+
+    if (lista.Count == 0)
+    {
+        Console.WriteLine("No hay tareas registradas.");
+        return;
+    }
+
+    Console.Write("Ingresa el ID de la tarea a marcar como completada: ");
+
+    if (int.TryParse(Console.ReadLine(), out int id))
+    {
+        var tarea = lista.FirstOrDefault(t => t.Id == id);
+
+        if (tarea != null)
+        {
+            tarea.Completada = true;
+            Console.WriteLine($"La tarea '{tarea.Titulo}' fue marcada como completada ✅");
+        }
+        else
+        {
+            Console.WriteLine("No se encontró ninguna tarea con ese ID.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("ID inválido.");
+    }
+}
+
 
 void Pausar()
 {
