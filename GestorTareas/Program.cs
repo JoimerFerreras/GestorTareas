@@ -1,5 +1,6 @@
 ﻿using GestorTareas.Clases;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Linq;
 
@@ -16,6 +17,7 @@ while (!salir)
     Console.WriteLine("===== GESTOR DE TAREAS =====");
     Console.WriteLine("1. Crear nueva tarea");
     Console.WriteLine("2. Listar tareas");
+    Console.WriteLine("3. Eliminar tarea");
     Console.WriteLine("4. Marcar como completada");
     Console.WriteLine("5. Salir");
     Console.Write("Elige una opción: ");
@@ -36,6 +38,13 @@ while (!salir)
         case "2":
             // LISTAR
             ListarTareas(tareas);
+            Pausar();
+            break;
+        
+        case "3":
+            // ELIMINAR
+            EliminarTarea(tareas);
+            GuardarTareasEnJson(tareas);
             Pausar();
             break;
 
@@ -145,6 +154,37 @@ List<Tarea> CargarTareasDesdeJson()
     return lista ?? new List<Tarea>();
 }
 
+void EliminarTarea(List<Tarea> lista)
+{
+    Console.Clear();
+    Console.WriteLine("=== Eliminar tarea ===");
+    
+    if (lista.Count == 0)
+    {
+        Console.WriteLine("No hay tareas para eliminar.");
+        return;
+    }
+
+    Console.Write("Ingresa el ID de la tarea a eliminar: ");
+    if (int.TryParse(Console.ReadLine(), out int id))
+    {
+        var tarea = lista.FirstOrDefault(t => t.Id == id);
+        if (tarea != null)
+        {
+            lista.Remove(tarea);
+            Console.WriteLine($"Tarea '{tarea.Titulo}' eliminada correctamente.");
+        }
+        else
+        {
+            Console.WriteLine($"No se encontró una tarea con ID {id}.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("ID inválido.");
+    }
+}
+
 void MarcarComoCompletada(List<Tarea> lista)
 {
     Console.Clear();
@@ -177,6 +217,7 @@ void MarcarComoCompletada(List<Tarea> lista)
         Console.WriteLine("ID inválido.");
     }
 }
+
 
 void Pausar()
 {
