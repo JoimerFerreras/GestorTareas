@@ -16,8 +16,8 @@ while (!salir)
     Console.WriteLine("===== GESTOR DE TAREAS =====");
     Console.WriteLine("1. Crear nueva tarea");
     Console.WriteLine("2. Listar tareas");
-    Console.WriteLine("3. Marcar como completada");
-    Console.WriteLine("4. Salir");
+    Console.WriteLine("4. Marcar como completada");
+    Console.WriteLine("5. Salir");
     Console.Write("Elige una opción: ");
 
     string opcion = Console.ReadLine();
@@ -39,14 +39,14 @@ while (!salir)
             Pausar();
             break;
 
-        case "3":
+        case "4":
             // MARCAR COMO COMPLETADA
             MarcarComoCompletada(tareas);
             GuardarTareasEnJson(tareas);
             Pausar();
             break;
             
-        case "4":
+        case "5":
             salir = true;
             break;
 
