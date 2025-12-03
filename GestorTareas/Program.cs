@@ -1,5 +1,6 @@
 ﻿using GestorTareas.Clases;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Linq;
 
@@ -16,7 +17,7 @@ while (!salir)
     Console.WriteLine("===== GESTOR DE TAREAS =====");
     Console.WriteLine("1. Crear nueva tarea");
     Console.WriteLine("2. Listar tareas");
-    Console.WriteLine("3. Marcar como completada");
+    Console.WriteLine("3. Eliminar tarea");
     Console.WriteLine("4. Salir");
     Console.Write("Elige una opción: ");
 
@@ -40,12 +41,12 @@ while (!salir)
             break;
 
         case "3":
-            // MARCAR COMO COMPLETADA
-            MarcarComoCompletada(tareas);
+            // ELIMINAR
+            EliminarTarea(tareas);
             GuardarTareasEnJson(tareas);
             Pausar();
             break;
-            
+
         case "4":
             salir = true;
             break;
@@ -145,31 +146,29 @@ List<Tarea> CargarTareasDesdeJson()
     return lista ?? new List<Tarea>();
 }
 
-void MarcarComoCompletada(List<Tarea> lista)
+void EliminarTarea(List<Tarea> lista)
 {
     Console.Clear();
-    Console.WriteLine("=== Marcar tarea como completada ===");
-
+    Console.WriteLine("=== Eliminar tarea ===");
+    
     if (lista.Count == 0)
     {
-        Console.WriteLine("No hay tareas registradas.");
+        Console.WriteLine("No hay tareas para eliminar.");
         return;
     }
 
-    Console.Write("Ingresa el ID de la tarea a marcar como completada: ");
-
+    Console.Write("Ingresa el ID de la tarea a eliminar: ");
     if (int.TryParse(Console.ReadLine(), out int id))
     {
         var tarea = lista.FirstOrDefault(t => t.Id == id);
-
         if (tarea != null)
         {
-            tarea.Completada = true;
-            Console.WriteLine($"La tarea '{tarea.Titulo}' fue marcada como completada ✅");
+            lista.Remove(tarea);
+            Console.WriteLine($"Tarea '{tarea.Titulo}' eliminada correctamente.");
         }
         else
         {
-            Console.WriteLine("No se encontró ninguna tarea con ese ID.");
+            Console.WriteLine($"No se encontró una tarea con ID {id}.");
         }
     }
     else
